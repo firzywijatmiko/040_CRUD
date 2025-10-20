@@ -19,5 +19,17 @@ const db = mysql.createConnection({
 })
 
 db.conection((err)=>{
-    if (err)
+    if (err){
+        console.error('error connecting to database:' + err.stack);
+        return;
+    }
+    console.log('connection succesfully');
+})
+
+app.get('api/users', (req, res)=>{
+    db.query('SELLECT * from users',(err, results)=>{
+        if(err){
+            console.error('error excuting')
+        }
+    })
 })
