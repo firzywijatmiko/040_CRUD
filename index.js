@@ -37,21 +37,38 @@ app.get('api/users', (req, res)=>{
     })
 })
 
-app.post('api/users', (req,res)=>{
-    const {nama, nim, kelas,} = req,body;
+app.post('api/users', (req, res) => {
+    const {nama, nim, kelas} = req.body;
 
-    if(!nama || !nim || !kelas ){
-        return res.status(400).json({message: "nama NIM dan kelas wajib disisi"});
+    if(!nama || !nim || !kelas){
+        return res.status(400).json({message: "Nama, NIM, dan Kelas wajib diisi."});
     }
+
     db.query(
-        "INSERT INTO users (nama, nim, kelas ) VALUES (?, ?, ?)"
+        "INSERT INTO users (nama, nim, kelas) VALUES (?, ?, ?)",
         [nama, nim, kelas],
-        (err.result) => {
-            if(err) {
+        (err, result) => {
+            if (err) {
                 console.error(err);
-                return res.status(500).json({message: "database error"});
+                return res.status(500).json({ message: "Database error"});
             }
-            res.status(201.).json({message: "user created succesfully"});
+            res.status(201).json({ message: "User created succesfully"});
+        }
+    );
+});
+
+app.put("api/users/:id", (req,res) => {
+    const userid = req.params.id;
+    const {nama, nim, kelas} = req.body;
+    db.query(
+        'UPDATE mahasiswa SET nama = ?, nim = ?, kelas = ? WHERE id = ?',
+        [nama, nim, kelas, userid],
+        (err, result) => {
+            if (err){
+                console.error(err);
+                return res.status(500).json({ message: "Database error"});
+            }
+            res.json({ message: "user updated successfully"});
         }
     )
 })
