@@ -29,7 +29,18 @@ db.conection((err)=>{
 app.get('api/users', (req, res)=>{
     db.query('SELLECT * from users',(err, results)=>{
         if(err){
-            console.error('error excuting')
+            console.error('error excuting query:' + err.stack);
+            res.status(500).send('error retching users');
+            return;
         }
+        res.json(result);
     })
+})
+
+app.post('api/users', (req,res)=>{
+    const {nama, nim, kelas,} = req,body;
+
+    if(!nama || !nim || !kelas ){
+        return res.status(400).json({message: "nama NIM dan kelas wajib disisi"});
+    }
 })
